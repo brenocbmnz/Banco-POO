@@ -30,7 +30,7 @@ class Conta:
         self.cliente = cliente
         self.historico = Historico()
 
-    def saldo(self):
+    def obter_saldo(self):
         return self.saldo
 
     def sacar(self, valor):
@@ -85,8 +85,10 @@ class Deposito(Transacao):
         self.valor = valor
 
     def registrar(self, conta):
-        conta.depositar(self.valor)
-        print(f"Depósito de R$ {self.valor:.2f} registrado.")
+        if conta.depositar(self.valor):
+            print(f"Depósito de R$ {self.valor:.2f} realizado com sucesso!")
+        else:
+            print("Erro ao realizar o depósito.")
 
 # Classe Saque
 class Saque(Transacao):
@@ -95,7 +97,9 @@ class Saque(Transacao):
 
     def registrar(self, conta):
         if conta.sacar(self.valor):
-            print(f"Saque de R$ {self.valor:.2f} registrado.")
+            print(f"Saque de R$ {self.valor:.2f} realizado com sucesso!")
+        else:
+            print("Erro ao realizar o saque.")
 
 # Função para cadastrar um novo cliente
 def cadastrar_cliente(clientes):
@@ -175,7 +179,7 @@ def exibir_extrato(contas):
         print("\n================ EXTRATO ================")
         for transacao in conta_encontrada.historico.transacoes:
             print(type(transacao).__name__, f": R$ {transacao.valor:.2f}")
-        print(f"Saldo: R$ {conta_encontrada.saldo:.2f}")
+        print(f"Saldo: R$ {conta_encontrada.obter_saldo():.2f}")
         print("==========================================")
     else:
         print("Conta não encontrada.")
